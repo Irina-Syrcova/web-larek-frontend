@@ -47,7 +47,6 @@ export class Card extends Component<ICard> {
         this.setText(this._title, value);
     }
 
-
     set image(value: string) {
         this.setImage(this._image, value, this.title)
     }
@@ -130,8 +129,8 @@ export class BasketItem extends Component<ICard> {
         this._number = ensureElement<HTMLSpanElement>(`.basket__item-index`, container);
 
         if (actions?.onClick) {
-            if (this._card) {
-                this._card.addEventListener('click', actions.onClick);
+            if (this._button) {
+                this._button.addEventListener('click', actions.onClick);
             } else {
                 container.addEventListener('click', actions.onClick);
             }

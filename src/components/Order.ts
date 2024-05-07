@@ -1,6 +1,6 @@
 import {Form} from "./common/Form";
 import {IFormAddress, IFormContacts} from "../types";
-import {EventEmitter, IEvents} from "./base/events";
+import {IEvents} from "./base/events";
 import {ensureElement} from "../utils/utils";
 
 export class Address extends Form<IFormAddress> {
@@ -42,7 +42,6 @@ export class Address extends Form<IFormAddress> {
             return 'card'
         }
         if (this._cash.classList.contains(`button_alt-active`)) {
-            // (this.container.elements.namedItem('cash') as HTMLButtonElement).value = value;
             return 'cash'
         }
     }

@@ -12,7 +12,6 @@ export class ProductItem extends Model<IProductItem> {
     title: string;
     category: string;
     price: number | null;
-    button: IProductItem[];
 }
 
 export class AppState extends Model<IAppState> {
@@ -25,25 +24,26 @@ export class AppState extends Model<IAppState> {
         items: [],
         payment: "",
         address: "",
-        total: "0"
+        total: 0
     };
     preview: string | null;
     formErrors: FormErrors = {};
 
-    getSelectedCards() {
-        return this.catalog
-            .filter(item => this.order.items.includes(item));
+    set total(value: number) {
+        this.order.total = value
     }
 
-    // clearBasket() {
-    //     this.order.items.forEach(id => {
-    //         this.toggleOrderedLot(id, false);
-    //         this.catalog.find(it => it.id === id).clearBid();
-    //     });
-    // }
+    getSelectedCards() {
+        return this.catalog
+            .filter(item => this.order.items.includes(item.id));
+    }
+
+    clearBasket(): string[] {
+        return this.order.items = []
+    }
 
     getTotal() {
-        return this.order.items.reduce((a,item) => a + item.price, 0)
+        return this.order.items.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0) 
     }
 
     setCatalog(items: IProductItem[]) {
