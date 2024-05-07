@@ -16,8 +16,8 @@ export interface IOrder {
     email: string;
     phone: string;
     address: string;
-    total: number;
-    items: string[];
+    total: string;
+    items: IProductItem[];
 }
 
 export interface IOrderResult {
@@ -33,3 +33,5 @@ export interface IAppState {
     catalog: IProductItem[];
     preview: string | null
 }
+
+export type FormErrors = Partial<Record<keyof IOrder, string>>;

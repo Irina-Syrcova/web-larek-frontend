@@ -6,12 +6,12 @@ interface ICardActions {
 }
 
 export interface ICard{
-    category: string;
+    category?: string;
     title: string;
-    image: string;
+    image?: string;
     price: number;
-    description: string;
-    selected: boolean;
+    description?: string;
+    number?: number;
 }
 
 export class Card extends Component<ICard> {
@@ -31,11 +31,7 @@ export class Card extends Component<ICard> {
         this._price = ensureElement<HTMLElement>(`.card__price`, container);
 
         if (actions?.onClick) {
-            if (this._card) {
-                this._card.addEventListener('click', actions.onClick);
-            } else {
-                container.addEventListener('click', actions.onClick);
-            }
+            container.addEventListener('click', actions.onClick);
         }
     }
 
@@ -93,7 +89,6 @@ export class Card extends Component<ICard> {
 export class Preview extends Card {
     protected _button: HTMLButtonElement;
     protected _description: HTMLElement;
-    protected _selected: boolean;
 
     constructor(container: HTMLElement, actions?: ICardActions) {
         super(container);
@@ -101,11 +96,7 @@ export class Preview extends Card {
         this._description = ensureElement<HTMLElement>(`.card__text`, container);
 
         if (actions?.onClick) {
-            if (this._button) {
-                this._button.addEventListener('click', actions.onClick);
-            } else {
-                container.addEventListener('click', actions.onClick);
-            }
+            this._button.addEventListener('click', actions.onClick);
         }
     }
 
@@ -120,8 +111,46 @@ export class Preview extends Card {
             this.toggleClass(this._category, `card__category_${this.categoryStyle(value)}`)
         }
     }
+}
 
-    set selected(value: boolean) {
-        this._selected = value;
+export class BasketItem extends Component<ICard> {
+    protected _title: HTMLElement;
+    protected _price: HTMLSpanElement;
+    protected _card: HTMLElement;
+    protected _button: HTMLButtonElement;
+    protected _number:  HTMLSpanElement;
+
+    constructor(container: HTMLElement, actions?: ICardActions) {
+        super(container);
+
+        this._card = container.querySelector(`.card`);
+        this._title = ensureElement<HTMLElement>(`.card__title`, container);
+        this._price = ensureElement<HTMLElement>(`.card__price`, container);
+        this._button = ensureElement<HTMLButtonElement>(`.card__button`, container);
+        this._number = ensureElement<HTMLSpanElement>(`.basket__item-index`, container);
+
+        if (actions?.onClick) {
+            if (this._card) {
+                this._card.addEventListener('click', actions.onClick);
+            } else {
+                container.addEventListener('click', actions.onClick);
+            }
+        }
+    }
+
+    set title(value: string) {
+        this.setText(this._title, value);
+    }
+
+    set price(value: number) {
+        if (value === null) {
+            this.setText(this._price, "Бесценно")
+        } else {
+            this.setText(this._price, `${value} синапсов`)
+        }
+    }
+
+    set number(value: number) {
+        this.setText(this._number, value)
     }
 }
