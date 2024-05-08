@@ -1,5 +1,6 @@
 import { ensureElement } from "../utils/utils";
 import { Component } from "./base/Component";
+import { getCategoryClass } from "../utils/constants";
 
 interface ICardActions {
     onClick: (event: MouseEvent) => void;
@@ -63,24 +64,7 @@ export class Card extends Component<ICard> {
         this.setText(this._category, value)
         if (value !== "софт-скил") {
             this.toggleClass(this._category, `card__category_soft`);
-            this.toggleClass(this._category, `card__category_${this.categoryStyle(value)}`)
-        }
-    }
-
-    categoryStyle(value: string): string {
-        switch (value) {
-            case "софт-скил":
-                return "soft"
-            case "другое":
-                return "other"
-            case "дополнительное":
-                return "additional"
-            case "кнопка":
-                return "button"
-            case "хард-скил":
-                return "hard"
-            default:
-                return this.category;
+            this.toggleClass(this._category, `card__category_${getCategoryClass(value)}`)
         }
     }
 }
@@ -107,7 +91,7 @@ export class Preview extends Card {
         this.setText(this._category, value)
         if (value !== "другое") {
             this.toggleClass(this._category, `card__category_other`);
-            this.toggleClass(this._category, `card__category_${this.categoryStyle(value)}`)
+            this.toggleClass(this._category, `card__category_${getCategoryClass(value)}`)
         }
     }
 }

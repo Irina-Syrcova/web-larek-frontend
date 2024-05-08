@@ -2,21 +2,21 @@ import { FormErrors, IAppState, IFormAddress, IFormContacts, IOrder, IProductIte
 import { Model } from "./base/Model";
 
 export type CatalogChangeEvent = {
-    catalog: ProductItem[]
+    catalog: IProductItem[]
 };
 
-export class ProductItem extends Model<IProductItem> {
-    id: string;
-    description: string;
-    image: string;
-    title: string;
-    category: string;
-    price: number | null;
-}
+// export class ProductItem extends Model<IProductItem> {
+//     id: string;
+//     description: string;
+//     image: string;
+//     title: string;
+//     category: string;
+//     price: number | null;
+// }
 
 export class AppState extends Model<IAppState> {
     basket: string[];
-    catalog: ProductItem[];
+    catalog: IProductItem[];
     loading: boolean;
     order: IOrder = {
         email: '',
@@ -47,11 +47,11 @@ export class AppState extends Model<IAppState> {
     }
 
     setCatalog(items: IProductItem[]) {
-        this.catalog = items.map(item => new ProductItem(item, this.events));
+        this.catalog = items.map(item => item, this.events);
         this.emitChanges('items:changed', { catalog: this.catalog });
     }
 
-    setPreview(item: ProductItem) {
+    setPreview(item: IProductItem) {
         this.preview = item.id;
         this.emitChanges('preview:changed', item);
     }

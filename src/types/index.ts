@@ -7,10 +7,6 @@ export interface IProductItem {
     price: number | null;
 }
 
-export interface IProductList {
-    cards: IProductItem[]
-}
-
 export interface IOrder {
     payment: string;
     email: string;
@@ -39,3 +35,7 @@ export interface IAppState {
 }
 
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
+export type ApiListResponse<Type> = {
+    items: Type[]
+};

@@ -1,24 +1,24 @@
 import './scss/styles.scss';
 import { LarekAPI } from './components/LarekAPI';
 import { API_URL, CDN_URL } from './utils/constants';
-import { AppState, CatalogChangeEvent, ProductItem } from './components/AppData';
+import { AppState, CatalogChangeEvent } from './components/AppData';
 import { Page } from './components/Page';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
 import { BasketItem, Card, Preview } from './components/Card';
-import { EventEmitter } from './components/base/events';
+import { EventEmitter } from './components/base/Events';
 import { Modal } from './components/common/Modal';
 import { Basket } from './components/common/Basket';
 import { Address, Contacts } from './components/Order';
-import { IFormAddress, IFormContacts } from './types';
+import { IFormAddress, IFormContacts, IProductItem } from './types';
 import { Success } from './components/common/Success';
 
 const events = new EventEmitter();
 const api = new LarekAPI(CDN_URL, API_URL);
 
 // Чтобы мониторить все события, для отладки
-events.onAll(({ eventName, data }) => {
-    console.log(eventName, data);
-})
+// events.onAll(({ eventName, data }) => {
+//     console.log(eventName, data);
+// })
 
 // Все шаблоны
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
@@ -153,7 +153,7 @@ events.on('bids:open', () => {
 });
 
 // Удаляется карточка из корзины
-events.on('preview:delete', (item: ProductItem) => {
+events.on('preview:delete', (item: IProductItem) => {
     if(appData.order.items.includes(item.id)) {
         appData.order.items.splice(appData.order.items.indexOf(item.id), 1)
     }
@@ -174,9 +174,8 @@ events.on('preview:delete', (item: ProductItem) => {
 })
 
 // Добавлена карточка в корзину
-events.on('preview:select', (item: ProductItem) => {
+events.on('preview:select', (item: IProductItem) => {
     modal.close()
-    console.log(item)
     
     if(!appData.order.items.includes(item.id) && item.price !== null) {
         appData.order.items.push(item.id)
@@ -198,13 +197,13 @@ events.on('preview:select', (item: ProductItem) => {
     basket.button = appData.order.items
 })
 // Открыть карточку
-events.on('card:select', (item: ProductItem) => {
+events.on('card:select', (item: IProductItem) => {
     appData.setPreview(item);
 });
 
 // Изменен открытый выбранный лот
-events.on('preview:changed', (item: ProductItem) => {
-    const showItem = (item: ProductItem) => {
+events.on('preview:changed', (item: IProductItem) => {
+    const showItem = (item: IProductItem) => {
         const card = new Preview(cloneTemplate(cardPreviewTemplate), {
             onClick: () => events.emit('preview:select', item)
         });
